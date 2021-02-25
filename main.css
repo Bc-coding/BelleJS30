@@ -1,0 +1,209 @@
+/*
+=============== 
+Fonts
+===============
+*/
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500&family=Roboto&display=swap");
+
+/*
+=============== 
+Variables
+===============
+*/
+:root {
+  --clr-bg: #fefdfc;
+  --clr-main: #c8eae5;
+  --clr-outline: #7ebdc2;
+  --clr-item-border: #b4dc7f;
+
+  --clr-btn-yellow: #fdca40;
+  --clr-btn-organge: #f3ba91;
+
+  --clr-header-text: #272c54;
+
+  /* fonts */
+  --ff-primary: "Roboto", sans-serif;
+  --ff-secondary: "Raleway", sans-serif;
+
+  --transition: all 0.3s linear;
+  --spacing: 0.2rem;
+  --radius: 0.25rem;
+  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  --max-width: 1170px;
+  --fixed-width: 700px;
+}
+
+/*
+=============== 
+Global Styles
+===============
+*/
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--clr-main);
+  font-size: 16px;
+}
+
+body {
+  min-height: calc(100vh - 1rem);
+  background-color: var(--clr-bg);
+  margin: 0.5rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 2px solid var(--clr-outline);
+  font-family: var(--ff-primary);
+  font-size: 1.2rem;
+}
+
+ul {
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: var(--spacing);
+  text-transform: capitalize;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  font-family: var(--ff-primary);
+}
+h1 {
+  font-size: 3rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 0.875rem;
+}
+p {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+@media screen and (min-width: 800px) {
+  h1 {
+    font-size: 4rem;
+  }
+  h2 {
+    font-size: 2.5rem;
+  }
+  h3 {
+    font-size: 1.75rem;
+  }
+  h4 {
+    font-size: 1rem;
+  }
+  body {
+    font-size: 1rem;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1;
+  }
+}
+
+/* header */
+
+header {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-family: var(--ff-secondary);
+}
+
+/* main */
+
+main {
+  margin-top: 3rem;
+}
+
+section {
+  margin: 6rem auto 2rem auto;
+}
+
+.exercise-list {
+  width: 60rem;
+  max-width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+li {
+  display: inline-block;
+  list-style-type: none;
+}
+
+.exercise-item {
+  width: 60rem;
+  max-width: 90vw;
+  margin: 0 auto 4rem auto;
+  font-size: 1.6rem;
+  padding: 2rem;
+  border: 3px solid var(--clr-item-border);
+  border-radius: 3px;
+  background-size: 5px 5px;
+  background-image: radial-gradient(
+      circle at top left,
+      var(--clr-item-border) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at top right,
+      var(--clr-item-border) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      var(--clr-item-border) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      var(--clr-item-border) 0 13%,
+      transparent 10%
+    );
+}
+
+.exercise-item > div {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--clr-bg);
+  padding: 4rem;
+  border-radius: 3px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  margin: 1rem 0.5rem 0 0;
+  line-height: 130%;
+  border: 2px solid #222;
+  color: #222;
+  border-radius: 1.5rem;
+}
+
+.btn-orange {
+  background-color: var(--clr-btn-organge);
+}
+
+.btn-yellow {
+  background-color: var(--clr-btn-yellow);
+}
