@@ -5,7 +5,10 @@
     <title>Scoped CSS Variables and JS</title>
   </head>
   <body>
-    <p>Update CSS Variables with <span class="hl">JS</span></p>
+    <p>
+      Update <span class="hl">CSS</span> Variables with
+      <span class="hl">JS</span>
+    </p>
 
     <div class="controls">
       <label for="width">Width:</label>
@@ -62,9 +65,6 @@
         height: var(--height);
         margin: 100px auto 20px auto;
       }
-      /*
-        misc styles, nothing to do with CSS variables
-      */
 
       body {
         text-align: center;
@@ -73,6 +73,11 @@
         font-family: "helvetica neue", sans-serif;
         font-weight: 100;
         font-size: 40px;
+      }
+
+      .hl {
+        font-weight: 700;
+        font-size: 50px;
       }
 
       .controls {
@@ -86,6 +91,8 @@
 
     <script>
       const inputs = document.querySelectorAll(".controls input");
+      const inputColor = document.getElementById("color");
+      const hlitems = document.querySelectorAll(".hl");
 
       function handleUpdate() {
         // console.log(this.value);
@@ -96,10 +103,16 @@
         );
       }
 
+      function changeBackground() {
+        hlitems.forEach(item => (item.style.color = `${this.value}`));
+      }
+
       inputs.forEach(input => input.addEventListener("change", handleUpdate));
       inputs.forEach(input =>
         input.addEventListener("mousemove", handleUpdate)
       );
+
+      inputColor.addEventListener("change", changeBackground);
     </script>
   </body>
 </html>
