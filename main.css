@@ -15,6 +15,7 @@ Variables
   --clr-main: #c8eae5;
   --clr-outline: #7ebdc2;
   --clr-item-border: #b4dc7f;
+  --clr-item-border-even: #b8b3e9;
 
   --clr-btn-yellow: #fdca40;
   --clr-btn-organge: #f3ba91;
@@ -178,6 +179,30 @@ li {
     radial-gradient(
       circle at bottom right,
       var(--clr-item-border) 0 13%,
+      transparent 10%
+    );
+}
+
+.exercise-item:nth-of-type(even) {
+  border: 3px solid var(--clr-item-border-even);
+  background-image: radial-gradient(
+      circle at top left,
+      var(--clr-item-border-even) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at top right,
+      var(--clr-item-border-even) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      var(--clr-item-border-even) 0 13%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      var(--clr-item-border-even) 0 13%,
       transparent 10%
     );
 }
