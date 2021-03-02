@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ajax Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <form class="search-form">
+          <input
+            type="text"
+            class="search"
+            placeholder="Capital City or Country"
+          />
+          <ul class="suggestions">
+            <li>Filter for a capital city</li>
+            <li>or a country</li>
+          </ul>
+        </form>
+      </div>
+      <div class="pass-container"></div>
+    </div>
+    <script>
+      // const endpoint =
+      //   "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+
+      const endpoint = "https://restcountries.eu/rest/v2/all";
+
+      const cities = [];
+
+      fetch(endpoint)
+        .then(blob => blob.json())
+        .then(data => {
+          cities.push(...data);
+          console.log(cities);
+        });
+
+      function findMatches(wordToMatch, cities) {
+        console.log(cities);
+        return cities.filter(place => {
+          // here we need to figure out if the city or state matches what was searched
+          const regex = new RegExp(wordToMatch, "gi");
+          return place.capital.match(regex) || place.name.match(regex);
+        });
+      }
+
+      function displayMatches() {
+        // console.log(this.value);
+        const matchArray = findMatches(this.value, cities);
+
+        if (matchArray.length !== 250) {
+          const html = matchArray
+            .map(place => {
+              // create a regex that matches the city name, we then replace the regex
+              const regex = new RegExp(this.value, "gi");
+              const cityName = place.capital.replace(
+                regex,
+                `<span class="hl">${this.value}</span>`
+              );
+              const countryName = place.name.replace(
+                regex,
+                `<span class="hl">${this.value}</span>`
+              );
+
+              return `
+          <li>
+            <span class="name">
+              ${cityName}, ${countryName}
+            </span>
+          </li>
+          `;
+            })
+            .join(" ");
+          suggestions.innerHTML = html;
+        }
+        if (matchArray.length === 250) {
+          suggestions.innerHTML = `<ul class="suggestions">
+            <li>Filter for a capital city</li>
+            <li>or a country</li>
+          </ul>`;
+          passContainer.innerHTML = "";
+        }
+
+        if (matchArray.length === 1) {
+          const htmlBoarding = matchArray
+            .map(place => {
+              const regex = new RegExp(this.value, "gi");
+              const cityName = place.capital.replace(
+                regex,
+                `<span>${this.value}</span>`
+              );
+              return `
+            <span class="name">
+              ${cityName}
+            </span>
+          `;
+            })
+            .join(" ");
+
+          passContainer.innerHTML = `
+          <div class="ticket">
+            <div class="ticket-top"></div>
+            <div class="ticket-bottom">
+              <div class="passenger">
+                <p>Passenger</p>
+                <p class="row2">Hello Kitty</p>
+              </div>
+              <div class="info">
+                <div>
+                  <p>From</p>
+                  <p class="row2">Taipei</p>    
+                </div>
+                <div>
+                  <p >To</p>
+                  <p class="destination row2">${htmlBoarding}</p> 
+                </div>
+                <div>
+                  <p>Date</p>
+                  <p class="row2">Anytime</p> 
+                </div>
+              </div>
+              <div class="boarding">
+                <p>Boarding Pass</p> 
+              </div>
+            </div>
+          </div>
+          `;
+        }
+      }
+
+      const searchInput = document.querySelector(".search");
+      const suggestions = document.querySelector(".suggestions");
+      const passContainer = document.querySelector(".pass-container");
+      searchInput.addEventListener("change", displayMatches);
+      searchInput.addEventListener("keyup", displayMatches);
+    </script>
+  </body>
+</html>
