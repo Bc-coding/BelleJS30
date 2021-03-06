@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script
+      type="text/javascript"
+      src="https://www.cornify.com/js/cornify.js"
+    ></script>
+    <style>
+      canvas {
+        border: 1px solid #d3d3d3;
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+
+  <body onload="startGame()">
+    <script>
+      // Add a component - make a component constructor, which lets you add components onto the gamearea
+      var myGamePiece;
+      // var myObstacle;  // this is a single obstable
+
+      var myObstacles = []; // define multiple obstacles, declare the obstacle variables as an array
+      0;
+      function startGame() {
+        myGamePiece = new component(30, 30, "car.png", 0, 120, "image");
+        // creating obstacle
+        myObstacle = new component(10, 200, "blue", 300, 120);
+        myGameArea.start();
+      }
+
+      // define Game Area
+      var myGameArea = {
+        canvas: document.createElement("canvas"),
+        start: function () {
+          this.canvas.width = 600;
+          this.canvas.height = 270;
+          this.context = this.canvas.getContext("2d");
+          document.body.insertBefore(this.canvas, document.body.childNodes[2]);
+
+          // Adding multiple obstacles -- we need a property for counting frames, and a method for execute something at a given frame rate
+          this.frameNo = 0;
+
+          // update the game area -- to make the game ready for action, we need to update the display 50 times per second
+          this.interval = setInterval(updateGameArea, 20);
+          // keyboard as Controller
+          window.addEventListener("keydown", function (e) {
+            // console.log(e.keyCode);
+            // myGameArea.key = e.keyCode;
+            myGameArea.keys = myGameArea.keys || [];
+            myGameArea.keys[e.keyCode] = true;
+          });
+          window.addEventListener("keyup", function (e) {
+            // myGameArea.key = false;
+            myGameArea.keys[e.keyCode] = false;
+          });
+        },
+        // add a function clear()
+        clear: function () {
+          this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        },
+        // game over = hit the obstacle
+        stop: function () {
+          clearInterval(this.interval);
+        },
+      };
+
+      // The function returns true if the current framenumber corresponds with the given interval
+      function everyInterval(n) {
+        if ((myGameArea.frameNo / n) % 1 == 0) {
+          return true;
+        }
+        return false;
+      }
+
+      function component(width, height, color, x, y, type) {
+        this.width = width;
+        if (type === "image") {
+          this.image = new Image();
+          this.image.src = color;
+        }
+        this.height = height;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.x = x;
+        this.y = y;
+        this.update = function () {
+          ctx = myGameArea.context;
+          if (type === "image") {
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+          } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+          }
+        };
+        // moving the game piece
+        this.newPosition = function () {
+          this.x += this.speedX;
+          this.y += this.speedY;
+        };
+
+        // define the collision
+        this.crashWith = function (otherobj) {
+          var myleft = this.x;
+          var myright = this.x + this.width;
+          var mytop = this.y;
+          var mybottom = this.y + this.height;
+          var otherleft = otherobj.x;
+          var otherright = otherobj.x + otherobj.width;
+          var othertop = otherobj.y;
+          var otherbottom = otherobj.y + otherobj.height;
+          var crash = true;
+          if (
+            mybottom < othertop ||
+            mytop > otherbottom ||
+            myright < otherleft ||
+            myleft > otherright
+          ) {
+            crash = false;
+          }
+          return crash;
+        };
+      }
+
+      // update the game area
+      function updateGameArea() {
+        // var x, y;
+        var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+
+        // Game over if crashing
+        for (i = 0; i < myObstacles.length; i += 1) {
+          if (myGamePiece.crashWith(myObstacles[i])) {
+            myGameArea.stop();
+            return;
+          }
+        }
+
+        myGameArea.clear();
+        myGameArea.frameNo += 1;
+
+        // we need to loop through every obstacle to see if there is a crash
+        // The updateGameOver function counts frames and adds an obstacle for every 150th frame
+        if (myGameArea.frameNo == 1 || everyInterval(150)) {
+          x = myGameArea.canvas.width;
+
+          //--- eqaul-sized obstacles --- //
+          // y = myGameArea.canvas.height - 200;
+          // myObstacles.push(new component(10, 200, "blue", x, y));
+
+          // Obstacles of random size
+          minHeight = 20;
+          maxHeight = 200;
+          height = Math.floor(
+            Math.random() * (maxHeight - minHeight + 1) + minHeight
+          );
+          minGap = 60;
+          maxGap = 200;
+          gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+          myObstacles.push(new component(10, height, "blue", x, 0));
+          myObstacles.push(
+            new component(10, x - height - gap, "blue", x, height + gap)
+          );
+        }
+
+        for (i = 0; i < myObstacles.length; i += 1) {
+          myObstacles[i].x += -1;
+          myObstacles[i].update();
+        }
+
+        // ************ Single Obstacle ************ //
+        // if (myGamePiece.crashWith(myObstacle)) {
+        //   myGameArea.stop();
+        // } else {
+        //   myGameArea.clear();
+
+        //   myGamePiece.speedX = 0;
+        //   myGamePiece.speedY = 0;
+
+        // if (myGameArea.key && myGameArea.key == 37) {
+        //   myGamePiece.speedX = -1;
+        // }
+
+        // if (myGameArea.key && myGameArea.key == 39) {
+        //   myGamePiece.speedX = 1;
+        // }
+
+        // if (myGameArea.key && myGameArea.key == 38) {
+        //   myGamePiece.speedY = -1;
+        // }
+
+        // if (myGameArea.key && myGameArea.key == 40) {
+        //   myGamePiece.speedY = 1;
+        // }
+
+        // if (myGameArea.keys && myGameArea.keys[37]) {
+        //   myGamePiece.speedX = -1;
+        // }
+
+        // if (myGameArea.keys && myGameArea.keys[39]) {
+        //   myGamePiece.speedX = 1;
+        // }
+        // if (myGameArea.keys && myGameArea.keys[38]) {
+        //   myGamePiece.speedY = -1;
+        // }
+        // if (myGameArea.keys && myGameArea.keys[40]) {
+        //   myGamePiece.speedY = 1;
+        // }
+
+        // moving obstacles
+        // myObstacle.update();
+        // myObstacle.x += -1;
+
+        myGamePiece.speedX = 0;
+        myGamePiece.speedY = 0;
+
+        if (myGameArea.keys && myGameArea.keys[37]) {
+          myGamePiece.speedX = -2;
+        }
+
+        if (myGameArea.keys && myGameArea.keys[39]) {
+          myGamePiece.speedX = 1;
+        }
+        if (myGameArea.keys && myGameArea.keys[38]) {
+          myGamePiece.speedY = -2;
+        }
+        if (myGameArea.keys && myGameArea.keys[40]) {
+          myGamePiece.speedY = 2;
+        }
+
+        // update myGamePiece position
+        myGamePiece.newPosition();
+        myGamePiece.update();
+      }
+
+      // Controllers - Make myGamePiece move
+      function moveup() {
+        myGamePiece.speedY -= 1;
+      }
+
+      function movedown() {
+        myGamePiece.speedY += 1;
+      }
+
+      function moveleft() {
+        myGamePiece.speedX -= 1;
+      }
+
+      function moveright() {
+        myGamePiece.speedX += 1;
+      }
+
+      function stopMove() {
+        myGamePiece.speedX = 0;
+        myGamePiece.speedY = 0;
+      }
+    </script>
+    <button
+      onmousedown="moveup()"
+      onmouseup="stopMove()"
+      ontouchstart="moveup()"
+      ontouchend="stopMove()"
+    >
+      UP
+    </button>
+    <button
+      onmousedown="movedown()"
+      onmouseup="stopMove()"
+      ontouchstart="movedown()"
+      ontouchend="stopMove()"
+    >
+      DOWN
+    </button>
+    <button
+      onmousedown="moveleft()"
+      onmouseup="stopMove()"
+      ontouchstart="moveleft()"
+      ontouchend="stopMove()"
+    >
+      LEFT
+    </button>
+    <button
+      onmousedown="moveright()"
+      onmouseup="stopMove()"
+      ontouchstart="moveright()"
+      ontouchend="stopMove()"
+    >
+      RIGHT
+    </button>
+  </body>
+</html>
+
+<!-- onmousedown="moveup()"
+      onmouseup="stopMove()" -->
