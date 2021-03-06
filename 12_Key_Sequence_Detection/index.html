@@ -307,9 +307,15 @@
         if (keySequence.join("").includes(konamiString)) {
           var confettiElement = document.querySelector("canvas");
           // console.log(confettiElement);
-          var confettiSettings = { target: confettiElement };
+          var confettiSettings = {
+            target: confettiElement,
+            width: 600,
+            height: 300,
+          };
           var confetti = new ConfettiGenerator(confettiSettings);
           confetti.render();
+
+          setTimeout(() => confetti.clear(), 2000);
         }
       });
     </script>
@@ -352,6 +358,13 @@
         >
           RIGHT
         </button>
+
+        <p>
+          <p>
+          The player can press the following sequence of keys on the game
+          controller to enable a cheat or other effects.</p>
+          <p> The Konami Code <span>⬆ </span><span>⬆ </span>  <span>⬇ </span><span>⬇ </span> <span>⬅  </span> <span>➡   </span> <span>⬅  </span> <span>➡  </span><span>B </span><span>A </span> </p>
+        </div>
       </div>
     </div>
   </body>
