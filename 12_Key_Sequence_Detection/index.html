@@ -2,15 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script src="confetti-js-master/dist/index.min.js"></script>
     <title>Key Detection</title>
-    <script
-      type="text/javascript"
-      src="https://www.cornify.com/js/cornify.js"
-    ></script>
+
     <style>
+      body > div {
+        margin: 0 auto;
+        text-align: center;
+        padding: 2rem 2rem;
+      }
       canvas {
         border: 1px solid #d3d3d3;
-        background-color: #f1f1f1;
+        background-color: #fcd5ce;
+        margin: 1rem auto;
       }
     </style>
   </head>
@@ -24,9 +28,9 @@
       var myObstacles = []; // define multiple obstacles, declare the obstacle variables as an array
       0;
       function startGame() {
-        myGamePiece = new component(30, 30, "car.png", 0, 120, "image");
+        myGamePiece = new component(40, 40, "car.png", 0, 120, "image");
         // creating obstacle
-        myObstacle = new component(10, 200, "blue", 300, 120);
+        // myObstacle = new component(10, 200, "red", 300, 120);
         myGameArea.start();
       }
 
@@ -35,9 +39,13 @@
         canvas: document.createElement("canvas"),
         start: function () {
           this.canvas.width = 600;
-          this.canvas.height = 270;
+          this.canvas.height = 300;
           this.context = this.canvas.getContext("2d");
-          document.body.insertBefore(this.canvas, document.body.childNodes[2]);
+          console.log(document.body.childNodes[3]);
+          document.body.childNodes[3].insertBefore(
+            this.canvas,
+            document.body.childNodes[3].childNodes[2]
+          );
 
           // Adding multiple obstacles -- we need a property for counting frames, and a method for execute something at a given frame rate
           this.frameNo = 0;
@@ -103,9 +111,9 @@
         // define the collision
         this.crashWith = function (otherobj) {
           var myleft = this.x;
-          var myright = this.x + this.width;
-          var mytop = this.y;
-          var mybottom = this.y + this.height;
+          var myright = this.x + this.width - 10;
+          var mytop = this.y + 10;
+          var mybottom = this.y + this.height - 10;
           var otherleft = otherobj.x;
           var otherright = otherobj.x + otherobj.width;
           var othertop = otherobj.y;
@@ -157,9 +165,9 @@
           minGap = 60;
           maxGap = 200;
           gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-          myObstacles.push(new component(10, height, "blue", x, 0));
+          myObstacles.push(new component(10, height, "#4361ee", x, 0));
           myObstacles.push(
-            new component(10, x - height - gap, "blue", x, height + gap)
+            new component(10, x - height - gap, "#4361ee", x, height + gap)
           );
         }
 
@@ -254,41 +262,81 @@
         myGamePiece.speedX = 0;
         myGamePiece.speedY = 0;
       }
+
+      // Konami Code
+      const keySequence = [];
+      let konamiString = "";
+      const konamiCode = [
+        "ArrowUp",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowLeft",
+        "ArrowRight",
+        "b",
+        "a",
+      ];
+
+      window.addEventListener("keyup", function (e) {
+        keySequence.push(e.key);
+        //console.log(e.key);
+        keySequence.splice(
+          -konamiCode.length - 1,
+          keySequence.length - konamiCode.length
+        );
+        konamiString = konamiCode.join("");
+
+        if (keySequence.join("").includes(konamiString)) {
+          var confettiElement = document.querySelector("canvas");
+          // console.log(confettiElement);
+          var confettiSettings = { target: confettiElement };
+          var confetti = new ConfettiGenerator(confettiSettings);
+          confetti.render();
+        }
+      });
     </script>
-    <button
-      onmousedown="moveup()"
-      onmouseup="stopMove()"
-      ontouchstart="moveup()"
-      ontouchend="stopMove()"
-    >
-      UP
-    </button>
-    <button
-      onmousedown="movedown()"
-      onmouseup="stopMove()"
-      ontouchstart="movedown()"
-      ontouchend="stopMove()"
-    >
-      DOWN
-    </button>
-    <button
-      onmousedown="moveleft()"
-      onmouseup="stopMove()"
-      ontouchstart="moveleft()"
-      ontouchend="stopMove()"
-    >
-      LEFT
-    </button>
-    <button
-      onmousedown="moveright()"
-      onmouseup="stopMove()"
-      ontouchstart="moveright()"
-      ontouchend="stopMove()"
-    >
-      RIGHT
-    </button>
+
+    <div>
+      <div>
+        <h1 class="text">Canvas Game with Konami Code</h1>
+      </div>
+
+      <div>
+        <button
+          onmousedown="moveup()"
+          onmouseup="stopMove()"
+          ontouchstart="moveup()"
+          ontouchend="stopMove()"
+        >
+          UP
+        </button>
+        <button
+          onmousedown="movedown()"
+          onmouseup="stopMove()"
+          ontouchstart="movedown()"
+          ontouchend="stopMove()"
+        >
+          DOWN
+        </button>
+        <button
+          onmousedown="moveleft()"
+          onmouseup="stopMove()"
+          ontouchstart="moveleft()"
+          ontouchend="stopMove()"
+        >
+          LEFT
+        </button>
+        <button
+          onmousedown="moveright()"
+          onmouseup="stopMove()"
+          ontouchstart="moveright()"
+          ontouchend="stopMove()"
+        >
+          RIGHT
+        </button>
+      </div>
+    </div>
   </body>
 </html>
-
-<!-- onmousedown="moveup()"
-      onmouseup="stopMove()" -->
