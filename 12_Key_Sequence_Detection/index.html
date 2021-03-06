@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <script src="confetti-js-master/dist/index.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
     <title>Key Detection</title>
 
     <style>
@@ -10,11 +15,22 @@
         margin: 0 auto;
         text-align: center;
         padding: 2rem 2rem;
+        font-family: "Roboto", sans-serif;
       }
       canvas {
         border: 1px solid #d3d3d3;
-        background-color: #fcd5ce;
+        background-color: #ffddd2;
         margin: 1rem auto;
+      }
+
+      button {
+        font-family: inherit;
+        background: #83c5be;
+        color: #222;
+        padding: 0.5rem 1rem;
+        outline: 0;
+        border: 0;
+        border-radius: 10px;
       }
     </style>
   </head>
@@ -165,9 +181,9 @@
           minGap = 60;
           maxGap = 200;
           gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-          myObstacles.push(new component(10, height, "#4361ee", x, 0));
+          myObstacles.push(new component(10, height, "#006d77", x, 0));
           myObstacles.push(
-            new component(10, x - height - gap, "#4361ee", x, height + gap)
+            new component(10, x - height - gap, "#006d77", x, height + gap)
           );
         }
 
