@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Shadow</title>
+  </head>
+  <body>
+    <div class="hero">
+      <span class="text">CSS</span>
+    </div>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap");
+
+      body {
+        background-color: #fae1dd;
+      }
+
+      .hero {
+        width: 600px;
+        height: 400px;
+        border: 3px solid transparent;
+        border-radius: 5%;
+        margin: 100px auto;
+        position: relative;
+      }
+
+      .text {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        text-transform: uppercase;
+        transform: translate(50%, -50%);
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 12em;
+        color: #adb5bd;
+        text-shadow: 1px 1px 1px #919191, 1px 2px 1px #919191,
+          1px 3px 1px #919191, 1px 4px 1px #919191, 1px 5px 1px #919191,
+          1px 6px 1px #919191, 1px 7px 1px #919191, 1px 8px 1px #919191,
+          1px 9px 1px #919191, 1px 10px 1px #919191,
+          5px 18px 6px rgba(16, 16, 16, 0.4),
+          5px 22px 10px rgba(16, 16, 16, 0.2),
+          5px 25px 35px rgba(16, 16, 16, 0.2),
+          5px 30px 60px rgba(16, 16, 16, 0.4);
+      }
+    </style>
+
+    <script>
+      // put mouseove addEventListener on Hero
+      // dynamically update the text shadow CSS
+      const hero = document.querySelector(".hero");
+      const text = document.querySelector(".text");
+
+      const walk = 100; // 100px
+
+      function shadow(e) {
+        //console.log(e);
+        const { offsetWidth: width, offsetHeight: height } = hero;
+        // we also need to know where the cursor is
+        let { offsetX: x, offsetY: y } = e;
+        // console.log(x, y);  if there are children elements inside the elment we are listening for, when we move the mouse, it still gives us x and y values of the children elements
+
+        // console.log(this, e.target); this here is the thing we are listening, e.target is the thing we trigger
+
+        if (this !== e.target) {
+          x = x + e.target.offsetLeft;
+          y = y + e.target.offsetTop;
+        }
+
+        // console.log(x, y);
+        const xWalk = Math.round((x / width) * walk - walk / 2);
+        const yWalk = Math.round((y / width) * walk - walk / 2);
+        //console.log(xWalk, yWalk);
+
+        text.style.textShadow = `1px 1px 1px #919191,
+        1px 2px 1px #919191,
+        1px 3px 1px #919191,
+        1px 4px 1px #919191,
+        1px 5px 1px #919191,
+        1px 6px 1px #919191,
+        1px 7px 1px #919191,
+        1px 8px 1px #919191,
+        1px 9px 1px #919191,
+        1px 10px 1px #919191,
+    ${xWalk + 5}px ${yWalk + 18}px 6px rgba(16,16,16,0.4),
+    ${xWalk + 5}px ${yWalk + 22}px 10px rgba(16,16,16,0.2),
+    ${xWalk + 5}px ${yWalk + 25}px 35px rgba(16,16,16,0.2),
+    ${xWalk + 5}px ${yWalk + 30}px 60px rgba(16,16,16,0.4)`;
+      }
+
+      hero.addEventListener("mousemove", shadow);
+    </script>
+  </body>
+</html>
